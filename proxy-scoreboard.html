@@ -1,0 +1,26 @@
+<html>
+<head>
+<meta http-equiv="refresh" content="5">
+<style>
+table { border: solid black 1px; }
+</style>
+</head>
+<body>
+
+Queued requests: {{queued}}<br>
+Active requests: {{flying}} ({{inflightCount}})<br>
+Last request made at: {{lastReq}}<br>
+Last request completed at: {{lastComplete}}<br>
+{{#if nextReq}}
+Further requests deferred until: {{nextReq}}<br>
+{{/if}}
+
+<table>
+<tr><th>Host</th><th>Queued</th><th>Active</th><th>Last Request</th><th>Last Complete</th><th>Deferred Until</th><th>Deferral exception</th></tr>
+{{#each hosts}}
+<tr><td>{{name}}</td><td>{{queued}}</td><td>{{flying}}</td><td>{{lastReq}}</td><td>{{lastComplete}}</td><td>{{nextReq}}</td><td>{{lastErr}}</td></tr>
+{{/each}}
+</table>
+
+</body>
+</html>

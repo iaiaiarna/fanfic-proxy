@@ -1,0 +1,29 @@
+[agent]
+name = "ExampleProxy"
+version = "1"
+homepage = "https://example.com"
+
+# this needs to be >= the global concurrent limit
+maxSockets = 60
+
+[proxy]
+port = 10700
+requestlog = true
+cache = true
+cachedir = 'cache/'
+
+[global.limits]
+per-second = 120
+concurrent = 60
+
+[sites.default]
+limits = { per-second = 8, concurrent = 4, retries = 5 }
+
+[sites."very-limited.example.com"]
+limits = { per-second = 1, concurrent = 2 }
+
+[sites."needs-authentication.example.com"]
+cookies = [
+  "auth_cookie=abc-def-ghi-jkl-ghi-123-456-789"
+]
+

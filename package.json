@@ -1,0 +1,58 @@
+{
+  "name": "@fanfic/proxy",
+  "version": "1.0.0",
+  "description": "This is a pretty basic HTTP proxy, of a sort.",
+  "main": "proxy.js",
+  "bin": "run-proxy.js",
+  "scripts": {
+    "test": "iarna-standard",
+    "prerelease": "npm t",
+    "release": "standard-version -s",
+    "postrelease": "npm publish && git push --follow-tags",
+    "update-coc": "weallbehave -o . && git add CODE_OF_CONDUCT.md && git commit -m 'docs(coc): updated CODE_OF_CONDUCT.md'",
+    "update-contrib": "weallcontribute -o . && git add CONTRIBUTING.md && git commit -m 'docs(contributing): updated CONTRIBUTING.md'"
+  },
+  "keywords": [],
+  "author": "Rebecca Turner <me@re-becca.org> (http://re-becca.org/)",
+  "license": "ISC",
+  "files": [
+    "fetch-back-off.js",
+    "proxy.js",
+    "proxy-scoreboard.html",
+    "rethrow.js",
+    "run-proxy.js"
+  ],
+  "dependencies": {
+    "@iarna/cli": "^2.0.2",
+    "@iarna/toml": "^2.2.3",
+    "@perl/qr": "^1.2.0",
+    "agentkeepalive": "^4.0.2",
+    "cacache": "^11.3.2",
+    "funstream": "^4.2.0",
+    "handlebars": "^4.1.2",
+    "koa": "^2.7.0",
+    "koa-logger": "^3.2.0",
+    "minizlib": "^1.2.1",
+    "moment": "^2.24.0",
+    "node-fetch": "^2.5.0",
+    "qw": "^1.0.1",
+    "tough-cookie": "^3.0.1",
+    "yargs": "^13.2.2"
+  },
+  "devDependencies": {
+    "@iarna/standard": "^2.0.1",
+    "weallbehave": "*",
+    "weallcontribute": "*",
+    "standard-version": "*",
+    "tap": "*"
+  },
+  "engines": {
+    "node": "^8.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iaiaiarna/fanfic-proxy.git"
+  },
+  "bugs": "https://github.com/iaiaiarna/fanfic-proxy/issues",
+  "homepage": "https://npmjs.com/package/@fanfic/proxy"
+}
