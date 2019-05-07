@@ -1,4 +1,4 @@
-#!/usr/bin/env node --optimize-for-size --concurrent-compiler-frontend --liftoff --wasm-opt --always-compact
+#!/usr/bin/env node
 'use strict'
 const proxy = require('./proxy.js')
 
