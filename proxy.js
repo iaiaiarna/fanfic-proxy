@@ -1,7 +1,6 @@
 'use strict'
 const fs = require('fs')
 const url = require('url')
-const { URL } = require('url')
 const qr = require('@perl/qr')
 const Koa = require('koa')
 const cacache = require('cacache/en')
@@ -91,7 +90,7 @@ module.exports = async userConf => {
   proxySrv.close()
 
   async function fixupHttps (ctx, next) {
-    const reqUrl = new URL(ctx.url)
+    const reqUrl = url.parse(ctx.url)
     if (reqUrl.protocol === 'https:' || reqUrl.port === 443) {
       reqUrl.protocol = 'https:'
       delete reqUrl.port
@@ -181,7 +180,7 @@ async function fromCache (ctx, conf, next) {
 
 async function fromNetwork (ctx, conf, next) {
   const userAgent = `Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:59.0; ${conf.agent.name}/${conf.agent.version}; +${conf.agent.homepage}) Gecko/20100101 Firefox/59.0`
-  const reqUrl = new URL(ctx.url)
+  const reqUrl = url.parse(ctx.url)
   const agent = conf.agent[reqUrl.protocol]
   const reqHeaders = {}
   reqHeaders['User-Agent'] = userAgent
