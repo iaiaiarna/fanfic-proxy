@@ -204,12 +204,14 @@ async function runQueue () {
         host.nextReq = Number(moment()) + retryDelay
         host.lastErr = 'Error: Server Error'
         if (res && res.body) await fun(res.body).forEach(_ => {}).catch(_ => {})
+        break
       } else if ((res && res.status === 408) || (err && (err.code === 'ETIMEOUT' || err.type === 'body-timeout' || /timeout/i.test(err.message)))) {
         process.emit('warn', `Timeout on ${info.uri} sleeping`, retryDelay / 1000, 'seconds')
         host.queue.unshift(info)
         host.nextReq = Number(moment()) + retryDelay
         host.lastErr = 'Error: Timeout'
         if (res && res.body) await fun(res.body).forEach(_ => {}).catch(_ => {})
+        break
       } else if (res && res.status === 429) {
         const retryAfter = res.headers['retry-after']
         let retryTime = 3000 + (500 * (info.tries ** 2))
@@ -225,6 +227,7 @@ async function runQueue () {
         host.nextReq = Number(moment()) + retryTime
         host.lastErr = 'Error: 429 Too Many Requests'
         if (res && res.body) await fun(res.body).forEach(_ => {}).catch(_ => {})
+        break
       } else if (err) {
         if (res && res.body) await fun(res.body).forEach(_ => {}).catch(_ => {})
         if (err.code === 'HPE_HEADER_OVERFLOW') {
