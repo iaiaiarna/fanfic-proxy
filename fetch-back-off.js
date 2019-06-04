@@ -6,16 +6,22 @@ const { canonicalDomain, CookieJar } = require('tough-cookie')
 const fun = require('funstream')
 const rethrow = require('./rethrow.js')
 
-function sleep (ms) {
-  return new Promise(resolve => setTimeout(resolve, ms))
-}
-async function timeout (ms) {
+function timeout (ms, ...promises) {
   const err = new Error('timeout')
   err.name = 'Timeout'
   err.code = 'ETIMEOUT'
   Error.captureStackTrace(err, timeout)
-  await sleep(ms)
-  throw err
+
+  let resolve
+  let to
+  const sleep = new Promise((_, reject) => {
+    resolve = _
+    to = setTimeout(() => reject(err), ms)
+  })
+  return Promise.race([sleep].concat(promises)).finally(() => {
+    clearTimeout(to)
+    resolve()
+  })
 }
 
 let queueRunner
@@ -175,7 +181,7 @@ async function runQueue () {
       }
       let res, err
       try {
-        res = await Promise.race([timeout((perSiteLimits['timeout'] * 1000) || 15000), info.fetch(info.uri, fetchOpts)])
+        res = await timeout((perSiteLimits['timeout'] * 1000) || 15000, info.fetch(info.uri, fetchOpts))
         if (res.headers && res.headers.has('set-cookie')) {
           for (let rawCookie of res.headers.raw()['set-cookie']) {
             try {
