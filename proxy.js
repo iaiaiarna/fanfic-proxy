@@ -121,8 +121,9 @@ module.exports = async userConf => {
             ctx.throw(500, err.message)
           })
         const hasCache = conf.proxy.cache
-        const onlyIfCached = ctx.header['cache-control'].toLowerCase() === 'only-if-cached'
-        const preferCached = ctx.header['cache-control'].toLowerCase() === 'prefer-cached'
+        const cacheControl = (ctx.header['cache-control'] || '').toLowerCase()
+        const onlyIfCached = cacheControl === 'only-if-cached'
+        const preferCached = cacheControl === 'prefer-cached'
         if (hasCache && (onlyIfCached || preferCached)) {
           try {
             return await fromCache(ctx, conf, next)
