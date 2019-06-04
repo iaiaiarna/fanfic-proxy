@@ -57,7 +57,6 @@ module.exports = (fetch, _config) => {
       delete state.inflight[uri]
     }
   }
-  backoffFetch.defaults = fetch.defaults
 
   return backoffFetch
 }
