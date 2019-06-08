@@ -13,6 +13,7 @@ require('@iarna/cli')(main)
   .boolean('verify')
   .describe('verify', 'Verify and clean the cache')
   .default('verify', true)
+  .describe('warn', 'Show warnings')
   .demand(1)
   .strict()
   .version()
@@ -23,6 +24,11 @@ async function main (opts, confFile) {
   const conf = {
     ...TOML.parse(await readFile(confFile)),
     verify: opts.verify
+  }
+  if (conf.warn) {
+    process.on('warn', msg => {
+      console.error(new Date().toLocaleTimeString(), 'warn', msg)
+    })
   }
   return Promise.all([
     proxy(conf)
