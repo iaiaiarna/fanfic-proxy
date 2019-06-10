@@ -244,6 +244,13 @@ async function runQueue () {
               ['Content-Type', 'text/html']
             ])
           })
+        } else if (err.code === 'ENETUNREACH') {
+          process.emit('warn', `Network unreachable sleeping`, retryDelay / 1000, 'seconds')
+          host.queue.unshift(info)
+          host.nextReq = Number(moment()) + retryDelay
+          host.lastErr = 'Error: Network Unreachable'
+          if (res && res.body) await fun(res.body).forEach(_ => {}).catch(_ => {})
+          break
         } else {
           info.done(Promise.reject(rethrow(err)))
         }
